@@ -129,12 +129,16 @@ export const blockedDays = (state) => {
     .filter((d) => !includesDay(allows, d));
 };
 
+const mergedChanges = (state) =>
+      state
+      .set('blockedDays', blockedDays(state))
+      .set('changes', new List());
+
 const manageAvailabilityReducer = (state = initialState, action) => {
   const { type, payload } = action;
 
   const saveInProgress = state.get('saveInProgress');
   let unsavedChanges = false;
-  console.debug('state:', state.toJS());
 
   switch (type) {
     case actionTypes.ALLOW_DAY:
@@ -146,10 +150,9 @@ const manageAvailabilityReducer = (state = initialState, action) => {
     case actionTypes.START_SAVING:
       return state.set('saveInProgress', true);
     case actionTypes.CHANGES_SAVED:
-      // TODO: merge in changes to blockedDays
-      // TODO: clear changes
-      // TODO: set isOpen to false
-      return state.set('saveInProgress', false).set('changes', new List());
+      return mergedChanges(state)
+        .set('saveInProgress', false)
+        .set('isOpen', false);
     case actionTypes.DATA_LOADED:
       return mergeNovelty(state, payload);
     case actionTypes.OPEN_EDIT_VIEW:

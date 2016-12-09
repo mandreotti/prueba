@@ -47,11 +47,11 @@ export const changeMonth = (day) =>
     // TODO ADD ERROR HANDLING
   };
 
-const startSaving = () => ({
+export const startSaving = () => ({
   type: actionTypes.START_SAVING,
 });
 
-const changesSaved = () => ({
+export const changesSaved = () => ({
   type: actionTypes.CHANGES_SAVED,
 });
 
@@ -61,7 +61,6 @@ export const saveChanges = () =>
 
     const state = getState().manageAvailability;
     const changes = compressedChanges(state);
-    console.debug('saving changes:', changes.toJS());
 
     // TODO: call Harmony API client
     window.setTimeout(() => {
