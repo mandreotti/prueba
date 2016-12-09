@@ -1,6 +1,7 @@
 import * as actionTypes from '../constants/ManageAvailabilityConstants';
 import _ from 'lodash';
 import * as harmony from '../services/harmony';
+import { compressedChanges } from '../reducers/ManageAvailabilityReducer';
 
 export const allowDay = (day) => ({
   type: actionTypes.ALLOW_DAY,
@@ -46,9 +47,27 @@ export const changeMonth = (day) =>
     // TODO ADD ERROR HANDLING
   };
 
-export const saveChanges = () => ({
-  type: actionTypes.SAVE_CHANGES,
+const startSaving = () => ({
+  type: actionTypes.START_SAVING,
 });
+
+const changesSaved = () => ({
+  type: actionTypes.CHANGES_SAVED,
+});
+
+export const saveChanges = () =>
+  (dispatch, getState) => {
+    dispatch(startSaving());
+
+    const state = getState().manageAvailability;
+    const changes = compressedChanges(state);
+    console.debug('saving changes:', changes.toJS());
+
+    // TODO: call Harmony API client
+    window.setTimeout(() => {
+      dispatch(changesSaved());
+    }, 5000);
+  };
 
 export const openEditView = () => ({
   type: actionTypes.OPEN_EDIT_VIEW,

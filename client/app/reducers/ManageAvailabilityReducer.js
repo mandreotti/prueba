@@ -22,6 +22,8 @@ const initialState = new Map({
   // for each day and comparing those to the blocked days above.
   changes: new List(),
 
+  saveInProgress: false,
+
   marketplaceUuid: null,
 
   listingUuid: null,
@@ -67,7 +69,7 @@ const mergeNovelty = (state, novelty) => {
 };
 
 // Calculate all unique changes to the original blocked days
-const compressedChanges = (state) => {
+export const compressedChanges = (state) => {
   const changes = state.get('changes');
 
   const isSameDayChange = (c1) => (c2) =>
@@ -130,6 +132,7 @@ export const blockedDays = (state) => {
 const manageAvailabilityReducer = (state = initialState, action) => {
   const { type, payload } = action;
   let unsavedChanges = false;
+  console.debug('state:', state.toJS());
 
   switch (type) {
     case actionTypes.ALLOW_DAY:
@@ -138,11 +141,13 @@ const manageAvailabilityReducer = (state = initialState, action) => {
       return withChange(state, ACTION_BLOCK, payload);
     case actionTypes.CHANGE_MONTH:
       return state.set('visibleMonth', payload);
-    case actionTypes.SAVE_CHANGES:
-      // TODO: save pending changes
-      // TODO: clear daysToAllow and daysToBlock lists
+    case actionTypes.START_SAVING:
+      return state.set('saveInProgress', true);
+    case actionTypes.CHANGES_SAVED:
+      // TODO: merge in changes to blockedDays
+      // TODO: clear changes
       // TODO: set isOpen to false
-      return state;
+    return state.set('saveInProgress', false).set('changes', new List());
     case actionTypes.DATA_LOADED:
       return mergeNovelty(state, payload);
     case actionTypes.OPEN_EDIT_VIEW:

@@ -15,11 +15,13 @@ const SaveButton = (props) => button({
     [css.saveButton]: true,
     [css.saveButtonVisible]: props.isVisible,
   }),
+  disabled: props.isDisabled,
   onClick: props.onClick,
 }, t('web.listings.save_and_close_availability_editing'));
 
 SaveButton.propTypes = {
   isVisible: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -71,6 +73,7 @@ class ManageAvailability extends Component {
           }) : null,
           r(SaveButton, {
             isVisible: this.props.hasChanges,
+            isDisabled: this.props.saveInProgress,
             onClick: this.props.onSave,
           }),
         ]),
@@ -82,6 +85,7 @@ class ManageAvailability extends Component {
 ManageAvailability.propTypes = {
   availability_link_id: PropTypes.string.isRequired,
   hasChanges: PropTypes.bool.isRequired,
+  saveInProgress: PropTypes.bool.isRequired,
   onOpen: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   winder: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
