@@ -62,7 +62,9 @@ export const saveChanges = () =>
     const state = getState().manageAvailability;
     const changes = compressedChanges(state);
 
-    // TODO: call Harmony API client
+    // TODO: call Harmony API client to save changes
+    // TODO: refetch data when saving is finished
+
     window.setTimeout(() => {
       dispatch(changesSaved());
     }, 5000);
