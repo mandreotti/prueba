@@ -141,7 +141,7 @@ describe('ManageAvailabilityReducer', () => {
 
   });
 
-  describe.only('saving', () => {
+  describe('saving', () => {
 
     it('toggles the save in progress flag', () => {
       let state = stateEmpty;
