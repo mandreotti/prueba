@@ -1,10 +1,12 @@
 import { Component, PropTypes } from 'react';
 import r, { button, div } from 'r-dom';
+import Immutable from 'immutable';
 import classNames from 'classnames';
 import { t } from '../../../utils/i18n';
 import SideWinder from '../../composites/SideWinder/SideWinder';
 import ManageAvailabilityHeader from '../../composites/ManageAvailabilityHeader/ManageAvailabilityHeader';
 import ManageAvailabilityCalendar from '../../composites/ManageAvailabilityCalendar/ManageAvailabilityCalendar';
+import FlashNotification from '../../composites/FlashNotification/FlashNotification';
 
 import css from './ManageAvailability.css';
 
@@ -75,12 +77,20 @@ class ManageAvailability extends Component {
           }),
         ]),
       ]),
+      r(FlashNotification, {
+        actions: this.props.actions,
+        messages: this.props.flashNotifications,
+      }),
     ]);
   }
 }
 
 ManageAvailability.propTypes = {
+  actions: PropTypes.shape({
+    removeFlashNotification: PropTypes.func.isRequired,
+  }).isRequired,
   availability_link_id: PropTypes.string.isRequired,
+  flashNotifications: PropTypes.instanceOf(Immutable.List).isRequired,
   hasChanges: PropTypes.bool.isRequired,
   onOpen: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
